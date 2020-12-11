@@ -3,11 +3,12 @@
 
 use gametracker;
 
-drop procedure if exists sp_getTeamPlayers;
-
 DELIMITER $$ 
 
-CREATE PROCEDURE sp_getTeamPlayers(teamName varchar(50))
+drop procedure if exists sp_getTeamPlayers;
+
+
+CREATE PROCEDURE sp_getTeamPlayers(teamID int)
 BEGIN
     select  firstName, 
             lastName, 
@@ -16,8 +17,8 @@ BEGIN
             batHandedness, 
             throwHandedness, 
             gradYear
-    from player p join team t on p.team = t.teamID
-    where t.name = teamName;
+    from player 
+    where team = teamID;
 END $$
 
 DELIMITER ;

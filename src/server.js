@@ -10,14 +10,13 @@ app.get('/', (req, res) => {
     res.sendFile('html/index.html', { root: '.'})
 })
 
-app.get('/api/v1/getTeamPlayers/:teamName', async (req, res) => {
+app.get('/api/v1/getTeamPlayers/:teamID', async (req, res) => {
 
     // extract and validate param
-    name = req.params.teamName.replace('+',' ')
-    console.log(name) 
+    teamID = parseInt(req.params.teamID)
 
     // get data
-    res.json(await db.getTeamPlayers(name))
+    res.json(await db.getTeamPlayers(teamID))
 })
 
 app.listen(port, () => {

@@ -15,9 +15,9 @@ class GameTrackerDB {
         })
     }
 
-    async getTeamPlayers(teamName) {
+    async getTeamPlayers(teamID) {
         return new Promise((resolve, reject) => {
-            let query = 'CALL sp_getTeamPlayers("'+teamName+'")'
+            let query = 'CALL sp_getTeamPlayers("'+teamID+'")'
             this.conn.query(query, (err, result) => {
                 return err ? reject(err) : resolve(result[0])
             })

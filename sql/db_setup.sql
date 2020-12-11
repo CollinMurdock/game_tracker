@@ -31,7 +31,7 @@ create table player(
     firstName varchar(50) not null,
     lastName varchar(50) not null,
     number int not null,
-    team int,
+    team int not null,
     position varchar(30),
     batHandedness ENUM('R','L'),
     throwHandedness ENUM('R','L'),
