@@ -33,7 +33,9 @@ create table player(
     number int not null,
     team int,
     position varchar(30),
-    handedness ENUM('R','L'),
+    batHandedness ENUM('R','L'),
+    throwHandedness ENUM('R','L'),
+    gradYear YEAR not null,
     primary key (playerID),
     FOREIGN key (team) references team(teamID)
 );
