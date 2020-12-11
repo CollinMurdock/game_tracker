@@ -12,6 +12,7 @@ create table team(
     city varchar(50),
     name varchar(50) not null,
     mascot varchar(50),
+    isDeleted TINYINT not null default 0,
     PRIMARY KEY (teamID)
 );
 
@@ -36,6 +37,7 @@ create table player(
     batHandedness ENUM('R','L'),
     throwHandedness ENUM('R','L'),
     gradYear YEAR not null,
+    isDeleted TINYINT not null default 0,
     primary key (playerID),
     FOREIGN key (team) references team(teamID)
 );
