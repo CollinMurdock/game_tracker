@@ -11,7 +11,6 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/v1/getTeamPlayers/:teamID', async (req, res) => {
-
     // extract and validate param
     teamID = parseInt(req.params.teamID)
 
