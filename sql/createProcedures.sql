@@ -12,7 +12,6 @@ drop procedure if exists sp_getTeamPlayers $$
 CREATE PROCEDURE sp_getTeamPlayers(arg_teamID int)
 BEGIN
     select  
-        teamID,
         firstName, 
         lastName, 
         number, 
