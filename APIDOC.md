@@ -13,7 +13,7 @@ A few different APIs to keep track of:
 
 Retrieve all players for the given team.
 
-##### Expected output
+##### Expected Response 
 
 ```
 {
@@ -34,6 +34,31 @@ Retrieve all players for the given team.
 }
 ```
 
+<br>
+<br>
+<br>
+<br>
+
+### GET /api/v1/getTeam:/teamID
+
+Get information for a team.
+
+##### Expected Response
+
+```
+{
+    "teamName": "Miami",
+    "state": "OH",
+    "city": "Oxford",
+    "mascot": "Redhawks"
+}
+```
+
+<br>
+<br>
+<br>
+<br>
+
 
 ### POST /api/v1/addTeam
 
@@ -48,6 +73,15 @@ Create a new team.
 |city|string|What city the team is lcoated in.|
 |mascot|string|The team mascot (i.e. Redskins)|
 
+##### Expected Response
+
+```
+{
+    "status": "success",
+    "teamID": 23
+}
+```
+
 <br>
 <br>
 <br>
@@ -56,6 +90,14 @@ Create a new team.
 ### POST /api/v1/deleteTeam/:teamID
 
 Deletes a team associated with the given teamID.
+
+##### Expected Response
+
+```
+{
+    "status": "success"
+}
+```
 
 <br>
 <br>
@@ -74,6 +116,45 @@ Edit the information about a team.
 |state|string|What state the team is located in. Two letter abbreviation code (i.e. OH)|
 |city|string|What city the team is lcoated in.|
 |mascot|string|The team mascot (i.e. Redskins)
+
+##### Expected Response
+
+```
+{
+    "status": "success",
+    "fieldsUpdated": [
+        "teamName": "new team name",
+        "state": "new team state",
+        "city": "new team city",
+        "mascot": "Redskins"
+    ]
+}
+```
+
+<br>
+<br>
+<br>
+<br>
+
+### GET /api/v1/getPlayer/:playerID
+
+Retrieve information on a given player.
+
+##### Expected Response
+
+```
+{
+    "id": 1,
+    "team": 1,
+    "firstName": "Jada",
+    "lastName": "Dotson",
+    "number": 1,
+    "position": "Outfielder",
+    "batHandedness": "R",
+    "throwHandedness": "R",
+    "gradYear": 2022
+}
+```
 
 <br>
 <br>
@@ -97,6 +178,15 @@ Adds a new player to a specified team.
 |throwHandedness|string|What hand the player throws with. "R" or "L".|
 |gradYear|int|**Required** The year that the player will graduate.|
 
+##### Expected Response
+
+```
+{
+    "status": "success",
+    "playerID": 23
+}
+```
+
 <br>
 <br>
 <br>
@@ -105,6 +195,14 @@ Adds a new player to a specified team.
 ### POST /api/v1/deletePlayer/:playerID
 
 Deletes a player from a team.
+
+##### Expected Response
+
+```
+{
+    "status": "success"
+}
+```
 
 <br>
 <br>
@@ -115,6 +213,8 @@ Deletes a player from a team.
 
 Edit the information for a player
 
+##### Parameters
+
 |Name|Type|Description|
 |---|---|---|
 |firstName|string|The first name of the player.|
@@ -124,6 +224,23 @@ Edit the information for a player
 |batHandedness|string|What hand the player bats with. "R" or "L".|
 |throwHandedness|string|What hand the player throws with. "R" or "L".|
 |gradYear|int|The year that the player will graduate.|
+
+##### Expected Response
+
+```
+{
+    "status": "success",
+    "fieldsUpdated": [
+        "firstName": "new first name",
+        "lastName": "new last name",
+        "number": "new number",
+        "position": "new position",
+        "batHandedness": "new bat handednesss",
+        "throwHandedness": "new throw handednesss",
+        "gradYear": "new graduation year"
+    ]
+}
+```
 
 -------------------------------------------------
 
