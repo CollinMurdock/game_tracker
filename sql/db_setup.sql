@@ -64,5 +64,5 @@ create table pitch(
     primary key (pitchID),
     FOREIGN key (game) references game(gameID),
     FOREIGN key (pitcher) references player(playerID),
-    FOREIGN key (hitter) references player(playerID),
+    FOREIGN key (batter) references player(playerID)
 );

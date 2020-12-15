@@ -36,26 +36,19 @@ class GameTrackerDB {
     }
 
     async addTeam(data, callback) {
-        console.log('first')
-        console.log(data)
         // team cannot have the same name as another
         let query = 'SELECT teamID FROM team WHERE name = ?'
         this.conn.query(query, [data.name], (err, result) => {
-            console.log('second')
-            console.log(data)
             if (err) return callback(err)
             if (result.length > 0) return callback(new Error("Team name already exists."))
             else createTeam(this.conn, data)
         })
-
+        
+        // create the team
         function createTeam (conn, data) {
-            console.log('third')
-            console.log(data)
             let q = 'CALL sp_addTeam("?", "?", "?", "?")'
             conn.query(q, [data.name, data.state, data.city, data.mascot], (err, result) => {
                 if (err) return callback(err)
-                console.log('fourth')
-                console.log(result)
             })
         }
     }
