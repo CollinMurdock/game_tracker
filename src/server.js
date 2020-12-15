@@ -24,8 +24,9 @@ app.get('/api/v1/getTeamPlayers/:teamID', async (req, res) => {
             else if (err.message == 'No players found.') res.status(404)
             else res.status(500)
             res.json({"error": err.message, "teamID": teamID})
+        } else {
+            res.json({"teamID": teamID, "players": result})
         }
-        res.json(result)
     })
 })
 
@@ -44,6 +45,23 @@ app.post('/api/v1/addTeam', async (req, res) => {
         }
 
         res.json({'status':'success'})
+    })
+})
+
+// GET player
+app.get('/api/v1/getPlayer/:playerID', async (req, res) => {
+
+    // TODO validate param
+    playerID = parseInt(req.params.playerID)
+
+    db.getPlayer(playerID, (err, result) => {
+        if (err){
+            if (err.message == 'Player not found.') res.status(404)
+            else  res.status(500)
+            res.json({"error": err.message, "playerID": playerID})
+        } else {
+            res.json({'playerID': playerID, 'player': result})
+        }
     })
 })
 

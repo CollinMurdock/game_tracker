@@ -62,7 +62,5 @@ create table pitch(
     swing varchar(20) not null, -- CHANGE LATER break it up? enum? see XO codebook
     -- keys
     primary key (pitchID),
-    FOREIGN key (game) references game(gameID),
-    FOREIGN key (pitcher) references player(playerID),
-    FOREIGN key (batter) references player(playerID)
+    FOREIGN key (game) references game(gameID)
 );
