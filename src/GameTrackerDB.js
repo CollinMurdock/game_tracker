@@ -15,13 +15,49 @@ class GameTrackerDB {
         })
     }
 
-    async getTeamPlayers(teamID) {
-        return new Promise((resolve, reject) => {
-            let query = 'CALL sp_getTeamPlayers("'+teamID+'")'
-            this.conn.query(query, (err, result) => {
-                return err ? reject(err) : resolve(result[0])
+    async getTeamPlayers(teamID, callback) {
+        // see if the team exists
+        let query = 'SELECT teamID FROM team WHERE teamID=? AND isDeleted < 1'
+        this.conn.query(query, [teamID], (err, result) => {
+            if (err) return callback(err)
+            if(result.length == 0) return callback(new Error("Team does not exist."))
+            else getPlayers(this.conn, teamID)
+        })
+
+        // get players
+        function getPlayers (conn, teamID) {
+            let query = 'CALL sp_getTeamPlayers("?")'
+            conn.query(query, [teamID], (err, result) => {
+                if (err) return callback(err)
+                if (result[0].length == 0) return callback(new Error("No players found."))
+                return callback(null, result[0])
             })
-        }) 
+        }
+    }
+
+    async addTeam(data, callback) {
+        console.log('first')
+        console.log(data)
+        // team cannot have the same name as another
+        let query = 'SELECT teamID FROM team WHERE name = ?'
+        this.conn.query(query, [data.name], (err, result) => {
+            console.log('second')
+            console.log(data)
+            if (err) return callback(err)
+            if (result.length > 0) return callback(new Error("Team name already exists."))
+            else createTeam(this.conn, data)
+        })
+
+        function createTeam (conn, data) {
+            console.log('third')
+            console.log(data)
+            let q = 'CALL sp_addTeam("?", "?", "?", "?")'
+            conn.query(q, [data.name, data.state, data.city, data.mascot], (err, result) => {
+                if (err) return callback(err)
+                console.log('fourth')
+                console.log(result)
+            })
+        }
     }
 }
 

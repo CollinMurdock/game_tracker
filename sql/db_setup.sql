@@ -47,7 +47,8 @@ create table pitch(
     pitchID int not null AUTO_INCREMENT,
     game int not null,
     pitcher int not null,
-    hitter int not null,
+    batter int not null,
+    pitchNum int not null,
     -- game state (before the pitch is thrown)
     balls int not null,
     strikes int not null,
@@ -64,7 +65,4 @@ create table pitch(
     FOREIGN key (game) references game(gameID),
     FOREIGN key (pitcher) references player(playerID),
     FOREIGN key (hitter) references player(playerID),
-    FOREIGN key (firstBase) references player(playerID),
-    FOREIGN key (secondBase) references player(playerID),
-    FOREIGN key (thirdBase) references player(playerID)
 );
