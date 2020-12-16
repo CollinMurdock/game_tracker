@@ -65,6 +65,22 @@ app.get('/api/v1/getPlayer/:playerID', async (req, res) => {
     })
 })
 
+// GET team
+app.get('/api/v1/getTeam/:teamID', async (req, res) => {
+
+    // TODO validate param
+    teamID = parseInt(req.params.teamID)
+
+    db.getTeam(teamID, (err, result) => {
+        if (err){
+            if (err.message == 'Team not found.') res.status(404)
+            else  res.status(500)
+            res.json({"error": err.message, "teamID": teamID})
+        } else {
+            res.json({'teamID': teamID, 'team': result})
+        }
+    })
+})
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)

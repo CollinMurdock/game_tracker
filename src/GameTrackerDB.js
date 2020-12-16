@@ -63,6 +63,17 @@ class GameTrackerDB {
             return callback(null, result[0])
         })
     }
+
+    async getTeam(teamID, callback) {
+        let q = 'SELECT * FROM team WHERE teamID = ? AND isDeleted < 1'
+        this.conn.query(q, [teamID], (err, result) => {
+            if (err) return callback(err)
+            if (result.length == 0) {
+                return callback(new Error("Team not found."))
+            }
+            return callback(null, result[0])
+        })
+    }
 }
 
 module.exports = GameTrackerDB
