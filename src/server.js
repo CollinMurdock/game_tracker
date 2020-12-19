@@ -147,6 +147,27 @@ app.post('/api/v1/deletePlayer/:playerID', async (req, res) => {
     })
 })
 
+// EDIT player 
+app.post('/api/v1/editPlayer/:playerID', async (req, res) => {
+
+    // TODO validate param
+    playerID = parseInt(req.params.playerID)
+    // TODO validate data
+    data = req.body
+
+    db.editPlayer(playerID, data, (err, result) => {
+        if (err){
+            if (err.message == 'Player not found.') res.status(404)
+            else if (err.message == 'Team not found.') res.status(400)
+            else if (err.message == 'Player number already taken on that team.') res.status(400)
+            else  res.status(500)
+            res.json({"error": err.message, 'status': 'fail'})
+        } else {
+            res.json({'status': 'success'})
+        }
+    })
+})
+
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })

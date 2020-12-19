@@ -158,16 +158,35 @@ create procedure sp_editPlayer(
     arg_gradYear year
 )
 begin
-    update player
-    set 
-		firstName = if(arg_firstName is null, firstName, arg_firstName),
-		lastName = if(arg_lastName is null, lastName, arg_lastName),
-		number = if(arg_number is null, number, arg_number),
-		position = if(arg_position is null, position, arg_position),
-		batHandedness = if(arg_batHandedness is null, batHandedness, arg_batHandedness),
-		throwHandedness = if(arg_throwHandedness is null, throwHandedness, arg_throwHandedness),
-		gradYear = if(arg_gradYear is null, gradYear, arg_gradYear)
-	where playerID = arg_playerID;
+	if exists ( -- make sure the player exists
+		select playerID from player where playerID = arg_playerID
+    )
+    then
+		if exists (	-- player can't have same number on same team
+				select playerID 
+				from player 
+				where number = arg_number and isDeleted < 1 
+						and team in (select team from player where playerID = arg_playerID)
+			) 
+		then
+			select 'Player number already taken on that team.' as out_error;
+		else
+			update player
+			set 
+				firstName = if(arg_firstName is null, firstName, arg_firstName),
+				lastName = if(arg_lastName is null, lastName, arg_lastName),
+				number = if(arg_number is null, number, arg_number),
+				position = if(arg_position is null, position, arg_position),
+				batHandedness = if(arg_batHandedness is null, batHandedness, arg_batHandedness),
+				throwHandedness = if(arg_throwHandedness is null, throwHandedness, arg_throwHandedness),
+				gradYear = if(arg_gradYear is null, gradYear, arg_gradYear)
+			where playerID = arg_playerID;
+			select 1 as result;
+		end if;
+    else
+		select 'Player not found.' as out_error;
+    end if;
+    
 end $$
 
 

@@ -186,7 +186,7 @@ Adds a new player to a specified team.
 <br>
 <br>
 
-### POST /api/v1/deletePlayer/:playerID
+### POST /api/v1/deletePlayer/:playerID COMPLETED
 
 Deletes a player from a team.
 
@@ -203,7 +203,7 @@ Deletes a player from a team.
 <br>
 <br>
 
-### POST /api/v1/editPlayer/:playerID
+### POST /api/v1/editPlayer/:playerID COMPLETED
 
 Edit the information for a player
 

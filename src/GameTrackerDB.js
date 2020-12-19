@@ -146,6 +146,27 @@ class GameTrackerDB {
             return callback(null, null)
         })
     }
+
+    async editPlayer(playerID, data, callback) {
+        // fill missing data with nulls
+        if (!data.firstName) data.firstName = null
+        if (!data.lastName) data.lastName = null
+        if (!data.number) data.number = null
+        if (!data.position) data.position = null
+        if (!data.batHandedness) data.batHandedness = null
+        if (!data.throwHandedness) data.throwHandedness = null
+        if (!data.gradYear) data.gradYear = null
+
+        let q = "CALL sp_editPlayer(?, ?, ?, ?, ?, ?, ?, ?)"
+        this.conn.query(q, [playerID, data.firstName, data.lastName, data.number, data.position,
+                        data.batHandedness, data.throwHandedness, data.gradYear], (err, result) => {
+            if (err) return callback(err)
+            if (result[0][0].out_error) { // validation error occured on mysql server
+                return callback(new Error(result[0][0].out_error))
+            }
+            return callback(null, result[0][0].out_playerID)
+        })
+    }
 }
 
 module.exports = GameTrackerDB
