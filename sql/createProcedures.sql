@@ -38,6 +38,7 @@ CREATE PROCEDURE sp_addTeam(
 BEGIN
     INSERT INTO team (state, city, name, mascot)
     values (arg_state, arg_city, arg_name, arg_mascot);
+    SELECT LAST_INSERT_ID() as out_teamID;
 END $$
 
 -- sp_deleteTeam
@@ -46,9 +47,20 @@ drop procedure if exists sp_deleteTeam $$
 
 create procedure sp_deleteTeam(arg_teamID int)
 BEGIN
-    update team 
-    set isDeleted = 1
-    where teamID = arg_teamID;
+	if exists (	
+				select teamID 
+				from team 
+                where teamID = arg_teamID 
+                and isDeleted < 1
+	)
+	then
+		update team 
+		set isDeleted = 1
+		where teamID = arg_teamID;
+        select 1 as out_result;
+    else
+		select 0 as result;
+	end if;
 end $$
 
 -- sp_editTeam
@@ -70,6 +82,8 @@ begin
         city = if(arg_city is null, city, arg_city),
         mascot = if(arg_mascot is null, mascot, arg_mascot)
     where teamID = arg_teamID;
+    
+    select 1 as result;
 end $$
 
 -- sp_addPlayer
@@ -87,9 +101,27 @@ create procedure sp_addPlayer(
     arg_gradYear year
 )
 begin
-    insert into player(firstName, lastName, number, team, position, batHandedness, throwHandedness, gradYear)
-    values (arg_firstName, arg_lastName, arg_number, arg_teamID, arg_position, arg_batHandedness, arg_throwHandedness, arg_gradYear)
-    ;
+	if not exists ( -- team needs to exist
+		select teamID 
+        from team
+        where teamID = arg_teamID
+    )
+    then
+		select 'Team not found.' as out_error;
+    elseif exists (	-- player can't have same number on same team
+			select playerID 
+			from player 
+			where team = arg_teamID 
+			and number = arg_number and isDeleted < 1
+		) 
+	then
+		select 'Player number already taken on that team.' as out_error;
+    else
+		insert into player(firstName, lastName, number, team, position, batHandedness, throwHandedness, gradYear)
+		values (arg_firstName, arg_lastName, arg_number, arg_teamID, arg_position, arg_batHandedness, arg_throwHandedness, arg_gradYear)
+		;
+        select LAST_INSERT_ID() as out_playerID;
+    end if;
 end $$
 
 -- sp_deletePlayer
@@ -98,9 +130,17 @@ drop procedure if exists sp_deletePlayer $$
 
 create procedure sp_deletePlayer(arg_playerID int)
 BEGIN
-    update player 
-    set isDeleted = 1
-    where playerID = arg_playerID;
+	if exists (
+		select playerID from player where playerID = arg_playerID
+    )
+    then
+		update player 
+		set isDeleted = 1
+		where playerID = arg_playerID;
+        select 1 as result;
+    else
+		select 0 as result;
+    end if;
 end $$
 
 -- sp_editPlayer

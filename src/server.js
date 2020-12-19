@@ -20,7 +20,7 @@ app.get('/api/v1/getTeamPlayers/:teamID', async (req, res) => {
     // get data
     db.getTeamPlayers(teamID, (err, result) => {
         if (err) {
-            if (err.message == 'Team does not exist.') res.status(404)
+            if (err.message == 'Team not found.') res.status(404)
             else if (err.message == 'No players found.') res.status(404)
             else res.status(500)
             res.json({"error": err.message, "teamID": teamID})
@@ -36,15 +36,12 @@ app.post('/api/v1/addTeam', async (req, res) => {
     // TODO validate data
     data = req.body
 
-    console.log('server')
-    console.log(data)
-    
     db.addTeam(data, (err, result) => {
         if (err) {
-            res.status(500).json({"error": err.message})
+            res.status(400).json({"error": err.message, 'status': 'fail'})
+        } else {
+            res.json({'status':'success', 'teamID': result})
         }
-
-        res.json({'status':'success'})
     })
 })
 
@@ -78,6 +75,74 @@ app.get('/api/v1/getTeam/:teamID', async (req, res) => {
             res.json({"error": err.message, "teamID": teamID})
         } else {
             res.json({'teamID': teamID, 'team': result})
+        }
+    })
+})
+
+// DELETE team
+app.post('/api/v1/deleteTeam/:teamID', async (req, res) => {
+
+    // TODO validate param
+    teamID = parseInt(req.params.teamID)
+
+    db.deleteTeam(teamID, (err) => {
+        if (err){
+            if (err.message == 'Team not found.') res.status(404)
+            else  res.status(500)
+            res.json({"error": err.message, 'status': 'fail'})
+        } else {
+            res.json({'status': 'success'})
+        }
+    })
+})
+
+// EDIT team
+app.post('/api/v1/editTeam/:teamID', async (req, res) => {
+
+    // TODO validate param
+    teamID = parseInt(req.params.teamID)
+    // TODO validate data
+    data = req.body
+
+    db.editTeam(teamID, data, (err, result) => {
+        if (err){
+            if (err.message == 'Team name already exists.') res.status(400)
+            else  res.status(500)
+            res.json({"error": err.message, 'status': 'fail'})
+        } else {
+            res.json({'status': 'success'})
+        }
+    })
+})
+
+// ADD player
+app.post('/api/v1/addPlayer', async (req, res) => {
+
+    // TODO validate data
+    data = req.body
+
+    db.addPlayer(data, (err, result) => {
+        if (err) {
+            res.status(400).json({"error": err.message, 'status': 'fail'})
+        } else {
+            res.json({'status':'success', 'playerID': result})
+        }
+    })
+})
+
+// DELETE player 
+app.post('/api/v1/deletePlayer/:playerID', async (req, res) => {
+
+    // TODO validate param
+    playerID = parseInt(req.params.playerID)
+
+    db.deletePlayer(playerID, (err) => {
+        if (err){
+            if (err.message == 'Player not found.') res.status(404)
+            else  res.status(500)
+            res.json({"error": err.message, 'status': 'fail'})
+        } else {
+            res.json({'status': 'success'})
         }
     })
 })

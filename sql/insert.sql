@@ -1,9 +1,18 @@
 
+delete from team
+where teamID < 10000000;
+ALTER TABLE team AUTO_INCREMENT = 1;
+
+delete from player
+where playerID < 10000000;
+ALTER TABLE player AUTO_INCREMENT = 1;
+
 insert into 
     team (state, city, name, mascot)
 values 
     ('OH', 'Oxford', 'Miami University', 'Redhawks'),
-    ('OH', 'Bowling Green', 'Bowling Green University', 'Falcons');
+    ('OH', 'Bowling Green', 'Bowling Green University', 'Falcons'),
+    ('OH', 'Columbus', 'Ohio State University', 'Buckeyes');
 
 
 insert into 

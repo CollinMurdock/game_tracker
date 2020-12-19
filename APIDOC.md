@@ -39,7 +39,7 @@ Retrieve all players for the given team.
 <br>
 <br>
 
-### GET /api/v1/getTeam:/teamID
+### GET /api/v1/getTeam:/teamID COMPLETED
 
 Get information for a team.
 
@@ -60,7 +60,7 @@ Get information for a team.
 <br>
 
 
-### POST /api/v1/addTeam
+### POST /api/v1/addTeam COMPLETED
 
 Create a new team.
 
@@ -87,7 +87,7 @@ Create a new team.
 <br>
 <br>
 
-### POST /api/v1/deleteTeam/:teamID
+### POST /api/v1/deleteTeam/:teamID COMPLETED
 
 Deletes a team associated with the given teamID.
 
@@ -104,7 +104,7 @@ Deletes a team associated with the given teamID.
 <br>
 <br>
 
-### POST /api/v1/editTeam/:teamID
+### POST /api/v1/editTeam/:teamID COMPLETED
 
 Edit the information about a team.
 
@@ -121,13 +121,7 @@ Edit the information about a team.
 
 ```
 {
-    "status": "success",
-    "fieldsUpdated": [
-        "teamName": "new team name",
-        "state": "new team state",
-        "city": "new team city",
-        "mascot": "Redskins"
-    ]
+    "status": "success"
 }
 ```
 
@@ -136,7 +130,7 @@ Edit the information about a team.
 <br>
 <br>
 
-### GET /api/v1/getPlayer/:playerID
+### GET /api/v1/getPlayer/:playerID COMPLETED
 
 Retrieve information on a given player.
 
@@ -161,7 +155,7 @@ Retrieve information on a given player.
 <br>
 <br>
 
-### POST /api/v1/addPlayer
+### POST /api/v1/addPlayer COMPLETED
 
 Adds a new player to a specified team. 
 

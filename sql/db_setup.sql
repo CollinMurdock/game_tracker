@@ -14,7 +14,7 @@ create table team(
     mascot varchar(50),
     isDeleted TINYINT not null default 0,
     PRIMARY KEY (teamID)
-);
+) engine = innodb;
 
 create table game(
     gameID INT NOT NULL AUTO_INCREMENT,
@@ -23,9 +23,9 @@ create table game(
     homeTeam int,
     awayTeam int,
     primary key (gameID),
-    FOREIGN key (homeTeam) references team(teamID),
-    FOREIGN key (awayTeam) references team(teamID)
-);
+    FOREIGN key (homeTeam) references team(teamID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN key (awayTeam) references team(teamID) ON UPDATE CASCADE ON DELETE CASCADE
+) engine = innodb;
 
 create table player(
     playerID int not null AUTO_INCREMENT,
@@ -39,8 +39,8 @@ create table player(
     gradYear YEAR not null,
     isDeleted TINYINT not null default 0,
     primary key (playerID),
-    FOREIGN key (team) references team(teamID)
-);
+    FOREIGN key (team) references team(teamID) ON UPDATE CASCADE ON DELETE CASCADE
+) engine = innodb;
 
 -- contain every pitch from every game
 create table pitch(
@@ -62,5 +62,5 @@ create table pitch(
     swing varchar(20) not null, -- CHANGE LATER break it up? enum? see XO codebook
     -- keys
     primary key (pitchID),
-    FOREIGN key (game) references game(gameID)
-);
+    FOREIGN key (game) references game(gameID) ON UPDATE CASCADE ON DELETE CASCADE
+) engine = innodb;
