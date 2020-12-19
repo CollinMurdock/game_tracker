@@ -140,10 +140,8 @@ class GameTrackerDB {
         let q = 'call sp_deletePlayer(?)'
         this.conn.query(q, [playerID], (err, result) => {
             if (err) return callback(err)
-            if (result.length == 0) {
+            if (result[0][0].result == 0) {
                 return callback(new Error("Player not found."))
-            } else if (result[0][0].result == 0) {
-                return callback(new Error("Team not found."))
             }
             return callback(null, null)
         })

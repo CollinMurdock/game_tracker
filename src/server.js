@@ -142,7 +142,7 @@ app.post('/api/v1/deletePlayer/:playerID', async (req, res) => {
             else  res.status(500)
             res.json({"error": err.message, 'status': 'fail'})
         } else {
-            res.json({'status': 'success'})
+            res.json({'status': 'success'}) 
         }
     })
 })
