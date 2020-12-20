@@ -163,9 +163,9 @@ BEGIN
 		update player 
 		set isDeleted = 1
 		where playerID = arg_playerID;
-        select 1 as result;
+        select 0 as status;
     else
-		select 0 as result;
+		select 1 as status;
     end if;
 end $$
 

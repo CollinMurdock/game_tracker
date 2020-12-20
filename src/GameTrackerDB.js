@@ -107,9 +107,7 @@ class GameTrackerDB {
         let q = 'call sp_deletePlayer(?)'
         this.conn.query(q, [playerID], (err, result) => {
             if (err) return callback(err)
-            if (result[0][0].result == 0) {
-                return callback(new Error("Player not found."))
-            }
+            if (result[0][0].status == 1) return callback(new Error("Player not found."))
             return callback(null, null)
         })
     }
