@@ -19,29 +19,20 @@ class GameTrackerDB {
         let query = 'CALL sp_getTeamPlayers("?")'
         this.conn.query(query, [teamID], (err, result) => {
             if (err) return callback(err)
-            if (result[0][0].result == 0) return callback(new Error("Team not found."))
+            if (result[0][0].out_error == 0) return callback(new Error("Team not found."))
             if (result[0].length == 0) return callback(new Error("No players found."))
             return callback(null, result[0])
         })
     }
 
     async addTeam(data, callback) {
-        // team cannot have the same name as another
-        let query = 'SELECT teamID FROM team WHERE name = ? AND isDeleted < 1'
-        this.conn.query(query, [data.name], (err, result) => {
-            if (err) return callback(err)
-            if (result.length > 0) return callback(new Error("Team name already exists."))
-            else createTeam(this.conn, data)
-        })
-        
         // create the team
-        function createTeam (conn, data) {
-            let q = "CALL sp_addTeam(?, ?, ?, ?)"
-            conn.query(q, [data.name, data.state, data.city, data.mascot], (err, result) => {
-                if (err) return callback(err)
-                return callback(null, result[0][0].out_teamID)
-            })
-        }
+        let q = "CALL sp_addTeam(?, ?, ?, ?)"
+        this.conn.query(q, [data.name, data.state, data.city, data.mascot], (err, result) => {
+            if (err) return callback(err)
+            if (result[0][0].out_error == 0) return callback(new Error('Team name already taken.'))
+            return callback(null, result[0][0].out_teamID)
+        })
     }
 
     async getPlayer(playerID, callback) {

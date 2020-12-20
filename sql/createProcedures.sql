@@ -28,7 +28,7 @@ BEGIN
 		from player 
 		where team = arg_teamID AND isDeleted < 1;
     else
-		select 0 as result;
+		select 0 as out_error;
     end if;
 END $$
 
@@ -43,9 +43,17 @@ CREATE PROCEDURE sp_addTeam(
     arg_mascot varchar(50)
 )
 BEGIN
-    INSERT INTO team (state, city, name, mascot)
-    values (arg_state, arg_city, arg_name, arg_mascot);
-    SELECT LAST_INSERT_ID() as out_teamID;
+	if not exists (
+		select teamID from team where name = arg_name
+    )
+    then
+		INSERT INTO team (state, city, name, mascot)
+		values (arg_state, arg_city, arg_name, arg_mascot);
+		SELECT LAST_INSERT_ID() as out_teamID;
+    else
+		select 0 as out_error;
+    end if;
+    
 END $$
 
 -- sp_deleteTeam
