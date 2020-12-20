@@ -133,7 +133,7 @@ begin
         where teamID = arg_teamID
     )
     then
-		select 'Team not found.' as out_error;
+        select 1 as status;
     elseif exists (	-- player can't have same number on same team
 			select playerID 
 			from player 
@@ -141,12 +141,12 @@ begin
 			and number = arg_number and isDeleted < 1
 		) 
 	then
-		select 'Player number already taken on that team.' as out_error;
+        select 2 as status;
     else
 		insert into player(firstName, lastName, number, team, position, batHandedness, throwHandedness, gradYear)
 		values (arg_firstName, arg_lastName, arg_number, arg_teamID, arg_position, arg_batHandedness, arg_throwHandedness, arg_gradYear)
 		;
-        select LAST_INSERT_ID() as out_playerID;
+        select LAST_INSERT_ID() as out_playerID, 0 as status;
     end if;
 end $$
 

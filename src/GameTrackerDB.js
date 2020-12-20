@@ -97,10 +97,8 @@ class GameTrackerDB {
         this.conn.query(q, [data.firstName, data.lastName, data.number, data.teamID, data.position,
                         data.batHandedness, data.throwHandedness, data.gradYear], (err, result) => {
             if (err) return callback(err)
-            if (result[0][0].outError) { // validation error occured on mysql server
-                return callback(new Error(result[0][0].out_error))
-            }
-            // check result
+            if (result[0][0].status == 1) return callback(new Error('Team not found.'))
+            if (result[0][0].status == 2) return callback(new Error('Player number already taken on that team.'))
             return callback(null, result[0][0].out_playerID)
         })
     }
