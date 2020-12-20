@@ -11,18 +11,25 @@ drop procedure if exists sp_getTeamPlayers $$
 
 CREATE PROCEDURE sp_getTeamPlayers(arg_teamID int)
 BEGIN
-    select  
-        playerID,
-        team,
-        firstName, 
-        lastName, 
-        number, 
-        position, 
-        batHandedness, 
-        throwHandedness, 
-        gradYear
-    from player 
-    where team = arg_teamID AND isDeleted < 1;
+	if exists (
+		select teamID from team where teamID = arg_teamID
+    )
+    then
+		select  
+			playerID,
+			team,
+			firstName, 
+			lastName, 
+			number, 
+			position, 
+			batHandedness, 
+			throwHandedness, 
+			gradYear
+		from player 
+		where team = arg_teamID AND isDeleted < 1;
+    else
+		select 0 as result;
+    end if;
 END $$
 
 -- sp_addTeam

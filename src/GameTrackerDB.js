@@ -16,23 +16,13 @@ class GameTrackerDB {
     }
 
     async getTeamPlayers(teamID, callback) {
-        // see if the team exists
-        let query = 'SELECT teamID FROM team WHERE teamID=? AND isDeleted < 1'
+        let query = 'CALL sp_getTeamPlayers("?")'
         this.conn.query(query, [teamID], (err, result) => {
             if (err) return callback(err)
-            if(result.length == 0) return callback(new Error("Team not found."))
-            else getPlayers(this.conn, teamID)
+            if (result[0][0].result == 0) return callback(new Error("Team not found."))
+            if (result[0].length == 0) return callback(new Error("No players found."))
+            return callback(null, result[0])
         })
-
-        // get players
-        function getPlayers (conn, teamID) {
-            let query = 'CALL sp_getTeamPlayers("?")'
-            conn.query(query, [teamID], (err, result) => {
-                if (err) return callback(err)
-                if (result[0].length == 0) return callback(new Error("No players found."))
-                return callback(null, result[0])
-            })
-        }
     }
 
     async addTeam(data, callback) {
