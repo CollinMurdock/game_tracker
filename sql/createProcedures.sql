@@ -27,6 +27,7 @@ BEGIN
 			gradYear
 		from player 
 		where team = arg_teamID AND isDeleted < 1;
+        select 0 as status;
     else
 		select 1 as status;
     end if;
@@ -94,10 +95,10 @@ begin
 		select teamID from team where teamID = arg_teamID
     )
     then
-		select 1 as status;
-    elseif arg_name is not null -- and exists (
--- 		select teamID from team where name = arg_name
---     )
+		select 1 as status; -- team doesn't exist
+    elseif arg_name is not null and exists (
+		select teamID from team where name = arg_name
+    )
     then
 		select 2 as status;
     else 
@@ -188,14 +189,14 @@ begin
 		select playerID from player where playerID = arg_playerID
     )
     then
-		if exists (	-- player can't have same number on same team
+		if exists (	
 				select playerID 
 				from player 
 				where number = arg_number and isDeleted < 1 
 						and team in (select team from player where playerID = arg_playerID)
 			) 
 		then
-            select 2 as status;
+            select 2 as status; -- player can't have same number on same team
 		else
 			update player
 			set 
@@ -210,7 +211,7 @@ begin
 			select 0 as status;
 		end if;
     else
-        select 1 as status;
+        select 1 as status; -- player not found
     end if;
     
 end $$

@@ -240,33 +240,67 @@ Edit the information for a player
 
 ## DB Stored Procedures
 
-### &#8226; sp_getTeamPlayers(teamName varchar(50))  COMPLETED
+##### Note on status codes
+Status codes are returned in a field called `status`
+
+### &#8226; sp_getTeamPlayers(teamName varchar(50))  
 
 Retrieve all fields for all players on a given team.
+
+###### Status Codes
+- 0: successful!
+- 1: team not found.
 
 ### &#8226; sp_addTeam(name varchar(50), state varchar(2), city varchar(50), mascot varchar(50))
 
 Create a new team.
 
+##### Status Codes
+- 0: successful!
+- 1: team name already taken
+
 ### &#8226; sp_deleteTeam(teamID int)
 
 Delete a team.
+
+##### Status Codes
+- 0: successful!
+- 1: team not found
 
 ### &#8226; sp_editTeam(teamID int, name varchar(50), state varchar(2), city varchar(50), mascot varchar(50))
 
 Edit information for a team.
 
+##### Status Codes
+- 0: successful!
+- 1: team not found
+- 2: team name already taken
+
 ### &#8226; sp_addPlayer(firstName varchar(50), lastName varchar(50), number int, teamID int, position varchar(30), batHandedness ENUM('R', 'L'), throwHandedness ENUM('R', 'L'), gradYear year)
 
 Create a new player.
+
+##### Status Codes
+- 0: successful!
+- 1: team not found
+- 2: new player has the same number as someone already on the team
 
 ### &#8226; sp_deletePlayer(playerID int)
 
 Delete a player.
 
+##### Status Codes
+- 0: successful!
+- 1: player not found
+
 ### &#8226; sp_editPlayer(playerID int, firstName varchar(50), lastName varchar(50), number int, position varchar(30), batHandedness ENUM('R', 'L'), throwHandedness ENUM('R', 'L'), gradYear year)
 
 Edit information for a player.
+
+##### Status Codes
+- 0: successful!
+- 1: player not found
+- 2: player has the same number as someone already on the team
 
 --------------------------------------------------
 
