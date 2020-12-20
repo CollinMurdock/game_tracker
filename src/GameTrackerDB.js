@@ -19,7 +19,7 @@ class GameTrackerDB {
         let query = 'CALL sp_getTeamPlayers("?")'
         this.conn.query(query, [teamID], (err, result) => {
             if (err) return callback(err)
-            if (result[0][0].out_error == 0) return callback(new Error("Team not found."))
+            if (result[0][0].status == 1) return callback(new Error("Team not found."))
             if (result[0].length == 0) return callback(new Error("No players found."))
             return callback(null, result[0])
         })
@@ -30,7 +30,7 @@ class GameTrackerDB {
         let q = "CALL sp_addTeam(?, ?, ?, ?)"
         this.conn.query(q, [data.name, data.state, data.city, data.mascot], (err, result) => {
             if (err) return callback(err)
-            if (result[0][0].out_error == 0) return callback(new Error('Team name already taken.'))
+            if (result[0][0].status == 1) return callback(new Error('Team name already taken.'))
             return callback(null, result[0][0].out_teamID)
         })
     }
@@ -63,7 +63,7 @@ class GameTrackerDB {
             if (err) return callback(err)
             if (result.length == 0) {
                 return callback(new Error("Team not found."))
-            } else if (result[0][0].result == 0) {
+            } else if (result[0][0].status == 1) {
                 return callback(new Error("Team not found."))
             }
             return callback(null, null)

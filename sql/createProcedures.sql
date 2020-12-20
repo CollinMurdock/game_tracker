@@ -28,7 +28,7 @@ BEGIN
 		from player 
 		where team = arg_teamID AND isDeleted < 1;
     else
-		select 0 as out_error;
+		select 1 as status;
     end if;
 END $$
 
@@ -49,9 +49,9 @@ BEGIN
     then
 		INSERT INTO team (state, city, name, mascot)
 		values (arg_state, arg_city, arg_name, arg_mascot);
-		SELECT LAST_INSERT_ID() as out_teamID;
+		SELECT LAST_INSERT_ID() as out_teamID, 0 as status;
     else
-		select 0 as out_error;
+		select 1 as status;
     end if;
     
 END $$
@@ -72,9 +72,9 @@ BEGIN
 		update team 
 		set isDeleted = 1
 		where teamID = arg_teamID;
-        select 1 as out_result;
+        select 0 as status;
     else
-		select 0 as result;
+		select 1 as status;
 	end if;
 end $$
 
@@ -90,15 +90,26 @@ create procedure sp_editTeam(
     arg_mascot varchar(50) 
 )
 begin 
-    update team
-    set 
-        name = if(arg_name is null, name, arg_name),
-        state = if(arg_state is null, state, arg_state),
-        city = if(arg_city is null, city, arg_city),
-        mascot = if(arg_mascot is null, mascot, arg_mascot)
-    where teamID = arg_teamID;
-    
-    select 1 as result;
+	if not exists (
+		select teamID from team where teamID = arg_teamID
+    )
+    then
+		select 1 as status;
+    elseif arg_name is not null and exists (
+		select teamID from team where name = arg_name
+    )
+    then
+		select 2 as status;
+    else 
+		update team
+		set 
+			name = if(arg_name is null, name, arg_name),
+			state = if(arg_state is null, state, arg_state),
+			city = if(arg_city is null, city, arg_city),
+			mascot = if(arg_mascot is null, mascot, arg_mascot)
+		where teamID = arg_teamID;
+		select 0 as status;
+    end if;    
 end $$
 
 -- sp_addPlayer
