@@ -112,7 +112,7 @@ Edit the information about a team.
 
 |Name|Type|Description|
 |---|---|---|
-|teamName|string|The name of the team.|
+|name|string|The name of the team.|
 |state|string|What state the team is located in. Two letter abbreviation code (i.e. OH)|
 |city|string|What city the team is lcoated in.|
 |mascot|string|The team mascot (i.e. Redskins)

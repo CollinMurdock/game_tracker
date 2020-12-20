@@ -95,9 +95,9 @@ begin
     )
     then
 		select 1 as status;
-    elseif arg_name is not null and exists (
-		select teamID from team where name = arg_name
-    )
+    elseif arg_name is not null -- and exists (
+-- 		select teamID from team where name = arg_name
+--     )
     then
 		select 2 as status;
     else 

@@ -106,7 +106,8 @@ app.post('/api/v1/editTeam/:teamID', async (req, res) => {
 
     db.editTeam(teamID, data, (err, result) => {
         if (err){
-            if (err.message == 'Team name already exists.') res.status(400)
+            if (err.message == 'Team not found.') res.status(404)
+            else if (err.message == 'Team name already exists.') res.status(400)
             else  res.status(500)
             res.json({"error": err.message, 'status': 'fail'})
         } else {
