@@ -195,7 +195,7 @@ begin
 						and team in (select team from player where playerID = arg_playerID)
 			) 
 		then
-			select 'Player number already taken on that team.' as out_error;
+            select 2 as status;
 		else
 			update player
 			set 
@@ -207,10 +207,10 @@ begin
 				throwHandedness = if(arg_throwHandedness is null, throwHandedness, arg_throwHandedness),
 				gradYear = if(arg_gradYear is null, gradYear, arg_gradYear)
 			where playerID = arg_playerID;
-			select 1 as result;
+			select 0 as status;
 		end if;
     else
-		select 'Player not found.' as out_error;
+        select 1 as status;
     end if;
     
 end $$
