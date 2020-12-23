@@ -20,8 +20,8 @@ create table game(
     gameID INT NOT NULL AUTO_INCREMENT,
     date date not null,
     time time,
-    homeTeam int,
-    awayTeam int,
+    homeTeam int not null,
+    awayTeam int not null,
     primary key (gameID),
     FOREIGN key (homeTeam) references team(teamID) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN key (awayTeam) references team(teamID) ON UPDATE CASCADE ON DELETE CASCADE
@@ -55,9 +55,15 @@ create table pitch(
     firstBase int,
     secondBase int,
     thirdBase int,
+    inning int not null,
     -- pitch info
-    pitchType varchar(20) not null, -- CHANGE LATER
-    pitchLocation int, -- refers to where the pitch crosses the plate. 1-9 in the box. 10-13 outside
+    pitchType varchar(20), 
+    -- pitch location
+    -- (0,0) is the top left of the stike zone 
+    -- numbers 0 - 100 are inside the strike zone
+    -- numbers outside that region are outside the strike zone
+    pitchLocationX smallint, 
+    pitchLocationY smallint,
     -- swing
     swing varchar(20) not null, -- CHANGE LATER break it up? enum? see XO codebook
     -- keys
